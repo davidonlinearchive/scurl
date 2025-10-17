@@ -1,0 +1,6 @@
+
+
+
+TEST COMMAND SYNTAX => `scurl GET http://scanme.nmap.org`
+
+TEST FLAG => flag works, wrong order of precedence,
