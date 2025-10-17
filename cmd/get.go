@@ -14,18 +14,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// getCmd represents the get command
-var getCmd = &cobra.Command{
-	Use:   "GET",
-	Short: "Perform a HTTP get request",
-	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("get command called") // remove line later; shows GET command called
-		url := args[0]                    // args[0] not os.Args[0]
-		SendGetRequest(url)
-	},
-}
-
 func SendGetRequest(url string) {
 	c := &http.Client{Timeout: 30 * time.Second} /*  Timeout client request after 30 seconds */
 
@@ -39,6 +27,18 @@ func SendGetRequest(url string) {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
+}
+
+// getCmd represents the get command
+var getCmd = &cobra.Command{
+	Use:   "GET",
+	Short: "Perform a HTTP get request",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("get command called") // remove line later; shows GET command called
+		url := args[0]                    // args[0] not os.Args[0]
+		SendGetRequest(url)
+	},
 }
 
 func init() {
