@@ -20,7 +20,7 @@ func sendHeadRequest(url string) {
 		log.Fatalf("Error creating request %v", err)
 	}
 
-	resp, err := c.Do(req)
+	resp, err := c.Do(req
 	if err != nil {
 		log.Fatalf("Request failed: %v", err)
 	}
