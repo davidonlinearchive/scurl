@@ -28,7 +28,6 @@ func SendGetRequest(url string) {
 	defer resp.Body.Close()
 
 	_, err = io.Copy(os.Stdout, resp.Body)
-
 }
 
 /*  getCmd represents the GET command */
