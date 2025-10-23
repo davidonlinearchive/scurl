@@ -4,3 +4,11 @@
 TEST COMMAND SYNTAX => `scurl GET http://scanme.nmap.org`
 
 TEST FLAG => flag works, wrong order of precedence,
+
+
+FUTURE FEATURES
+enable redirection if http scheme is incorrect [ http://example.com => https://example.com]
+downloading responses in different formats
+multi-threaded request using go routines
+being able to send different types of data
+pretty printed response

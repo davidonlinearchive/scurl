@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -12,10 +9,10 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "scurl [url]",
-	Short: "Scurl (Simple-curl) is a CLI tool used for transferring data",
+	Short: "Scurl (Simple-curl) is a CLI tool used for making HTTP requests",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		url := args[0]
+		url := args[0] /* args[0] != os.Args[0] */
 		SendGetRequest(url)
 	},
 }
