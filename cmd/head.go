@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -20,12 +17,14 @@ func sendHeadRequest(url string) {
 		log.Fatalf("Error creating request %v", err)
 	}
 
-	resp, err := c.Do(req
+	resp, err := c.Do(req)
 	if err != nil {
 		log.Fatalf("Request failed: %v", err)
 	}
 	defer resp.Body.Close()
 
+	// resp.Header is a map[string][]string where each key is a header name
+	// and each value is a list of header values. This loop prints them all.
 	for key, values := range resp.Header {
 		for _, v := range values {
 			fmt.Printf("%s: %s\n", key, v)
@@ -33,7 +32,6 @@ func sendHeadRequest(url string) {
 	}
 }
 
-// headCmd represents the head command
 var headCmd = &cobra.Command{
 	Use:   "HEAD",
 	Short: "Perform a HTTP head request",

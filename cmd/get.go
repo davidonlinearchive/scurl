@@ -1,6 +1,3 @@
-/*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -30,13 +27,12 @@ func SendGetRequest(url string) {
 	_, err = io.Copy(os.Stdout, resp.Body)
 }
 
-/*  getCmd represents the GET command */
 var getCmd = &cobra.Command{
 	Use:   "GET",
 	Short: "Perform a HTTP get request",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		url := args[0] /* args[0] != os.Args[0] */
+		url := args[0]
 		SendGetRequest(url)
 	},
 }
