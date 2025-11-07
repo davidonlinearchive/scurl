@@ -11,9 +11,9 @@ var rootCmd = &cobra.Command{
 	Use:   "scurl [url]",
 	Short: "Scurl (Simple-curl) is a CLI tool used for making HTTP requests",
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		url := args[0] /* args[0] != os.Args[0] */
-		SendGetRequest(url)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		url := args[0] // args[0] != os.Args[0]
+		return SendGetRequest(url)
 	},
 }
 
