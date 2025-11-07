@@ -1,8 +1,8 @@
 package cmd
 
 import (
+	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -10,21 +10,25 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func SendGetRequest(url string) {
-	c := &http.Client{Timeout: 13 * time.Second} //  Timeout client requests after 15 seconds
+func SendGetRequest(url string) error {
+	c := &http.Client{Timeout: 13 * time.Second} //  Timeout client requests after 13 seconds
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Fatalf("Error creating request: %v", err)
+		return fmt.Errorf("failed to create request: %w", err)
 	}
 
 	resp, err := c.Do(req)
 	if err != nil {
-		log.Fatalf("Request failed: %v", err)
+		return fmt.Errorf("failed request: %w", err)
 	}
 	defer resp.Body.Close()
 
-	_, err = io.Copy(os.Stdout, resp.Body)
+	if _, err := io.Copy(os.Stdout, resp.Body); err != nil {
+		return fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	return nil
 }
 
 var getCmd = &cobra.Command{

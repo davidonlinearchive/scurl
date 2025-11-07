@@ -18,7 +18,7 @@ func SendPostRequest(url string, data string, HeaderMap map[string]string) error
 
 	req, err := http.NewRequest("POST", url, strings.NewReader(data))
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create request: %w", err)
 	}
 
 	for key, value := range HeaderMap {
@@ -27,7 +27,7 @@ func SendPostRequest(url string, data string, HeaderMap map[string]string) error
 
 	resp, err := c.Do(req)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed request: %w", err)
 	}
 	defer resp.Body.Close()
 
@@ -47,7 +47,7 @@ func SendPostRequest(url string, data string, HeaderMap map[string]string) error
 		if err := json.Indent(&prettyJSON, body, "", "\t"); err == nil {
 			fmt.Println(prettyJSON.String())
 		} else {
-			fmt.Println(string(body)) //  print raw body
+			fmt.Println(string(body))
 		}
 
 	// Pretty-prints XML if possible, else print raw body
@@ -61,7 +61,6 @@ func SendPostRequest(url string, data string, HeaderMap map[string]string) error
 
 	default:
 		fmt.Println(string(body))
-
 	}
 
 	return nil

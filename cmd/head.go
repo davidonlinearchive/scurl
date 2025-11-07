@@ -2,24 +2,23 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/spf13/cobra"
 )
 
-func SendHeadRequest(url string) {
+func SendHeadRequest(url string) error {
 	c := &http.Client{Timeout: 13 * time.Second}
 
 	req, err := http.NewRequest("HEAD", url, nil)
 	if err != nil {
-		log.Fatalf("Error creating request %v", err)
+		return fmt.Errorf("failed to create request: %w", err)
 	}
 
 	resp, err := c.Do(req)
 	if err != nil {
-		log.Fatalf("Request failed: %v", err)
+		return fmt.Errorf("failed request: %w", err)
 	}
 	defer resp.Body.Close()
 
@@ -32,6 +31,8 @@ func SendHeadRequest(url string) {
 			fmt.Printf("\033[1m%s\033[0m: %s\n", key, v)
 		}
 	}
+
+	return nil
 }
 
 var headCmd = &cobra.Command{
