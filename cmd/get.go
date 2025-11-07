@@ -11,7 +11,7 @@ import (
 )
 
 func SendGetRequest(url string) {
-	c := &http.Client{Timeout: 30 * time.Second} /*  Timeout client request after 30 seconds */
+	c := &http.Client{Timeout: 13 * time.Second} //  Timeout client requests after 15 seconds
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -28,7 +28,7 @@ func SendGetRequest(url string) {
 }
 
 var getCmd = &cobra.Command{
-	Use:   "GET",
+	Use:   "get",
 	Short: "Perform a HTTP get request",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
