@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -17,6 +18,8 @@ func SendGetRequest(url string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
 	}
+
+	req.Header.Set("User-Agent", "scurl/0.1")
 
 	resp, err := c.Do(req)
 	if err != nil {
@@ -35,9 +38,13 @@ var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Perform a HTTP get request",
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		url := args[0]
-		SendGetRequest(url)
+		if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
+			url = "http://" + url
+		}
+		return SendGetRequest(url)
+
 	},
 }
 

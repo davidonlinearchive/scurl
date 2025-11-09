@@ -21,6 +21,7 @@ func SendPostRequest(url string, data string, HeaderMap map[string]string) error
 		return fmt.Errorf("failed to create request: %w", err)
 	}
 
+	req.Header.Set("User-Agent", "scurl/0.1")
 	for key, value := range HeaderMap {
 		req.Header.Set(key, value)
 	}
@@ -32,12 +33,11 @@ func SendPostRequest(url string, data string, HeaderMap map[string]string) error
 	defer resp.Body.Close()
 
 	contentType := resp.Header.Get("Content-Type")
-	fmt.Printf("response header: content type: %v\n", contentType) // remove me
 	fmt.Println("HTTP STATUS: ", resp.Status)
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to read body: %w", err)
 	}
 
 	switch {
@@ -53,10 +53,10 @@ func SendPostRequest(url string, data string, HeaderMap map[string]string) error
 	// Pretty-prints XML if possible, else print raw body
 	case strings.Contains(contentType, "application/xml"), strings.Contains(contentType, "text/xml"):
 		prettyXml := xmlfmt.FormatXML(string(body), "", "\t", false)
-		if prettyXml == "" {
-			fmt.Println(string(body))
-		} else {
+		if prettyXml != "" {
 			fmt.Println(prettyXml)
+		} else {
+			fmt.Println(string(body))
 		}
 
 	default:
@@ -72,9 +72,13 @@ var postCmd = &cobra.Command{
 	Short: "Perform a HTTP POST request",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		url := args[0]
+		if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
+			url = "http://" + url
+		}
+
 		data, _ := cmd.Flags().GetString("data")
 		headers, _ := cmd.Flags().GetStringArray("header")
-		url := args[0]
 
 		headerMap := make(map[string]string)
 		for _, h := range headers {

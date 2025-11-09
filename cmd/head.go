@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -16,6 +17,8 @@ func SendHeadRequest(url string) error {
 		return fmt.Errorf("failed to create request: %w", err)
 	}
 
+	req.Header.Set("User-Agent", "scurl/0.1")
+
 	resp, err := c.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed request: %w", err)
@@ -27,8 +30,7 @@ func SendHeadRequest(url string) error {
 	// and each value is a list of header values. This loop prints them all.
 	for key, values := range resp.Header {
 		for _, v := range values {
-			// \033[1m starts bold, \033[0m resets formatting
-			fmt.Printf("\033[1m%s\033[0m: %s\n", key, v)
+			fmt.Printf("\033[1m%s\033[0m: %s\n", key, v) // \033[1m starts bold, \033[0m resets formatting
 		}
 	}
 
@@ -39,9 +41,12 @@ var headCmd = &cobra.Command{
 	Use:   "head",
 	Short: "Perform a HTTP head request",
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		url := args[0]
-		SendHeadRequest(url)
+		if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
+			url = "http://" + url
+		}
+		return SendHeadRequest(url)
 	},
 }
 
