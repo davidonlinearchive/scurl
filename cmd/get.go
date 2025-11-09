@@ -35,7 +35,7 @@ func SendGetRequest(url string) error {
 }
 
 var getCmd = &cobra.Command{
-	Use:   "get",
+	Use:   "get [url]",
 	Short: "Perform a HTTP get request",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {

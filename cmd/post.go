@@ -68,9 +68,13 @@ func SendPostRequest(url string, data string, HeaderMap map[string]string) error
 
 // postCmd represents the post command
 var postCmd = &cobra.Command{
-	Use:   "post",
+	Use:   "post [url]",
 	Short: "Perform a HTTP POST request",
-	Args:  cobra.ExactArgs(1),
+	Long: `Send a HTTP POST request to the specified URL.
+
+Examples:
+  scurl post https://example.com/post -d '{"key":"value"}' -H "Content-Type: application/json"`,
+	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		url := args[0]
 		if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
@@ -96,5 +100,5 @@ var postCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(postCmd)
 	postCmd.Flags().StringP("data", "d", "", "HTTP POST data")
-	postCmd.Flags().StringArrayP("header", "H", []string{}, "Custom request header")
+	postCmd.Flags().StringArrayP("header", "H", []string{}, "set request header")
 }
